@@ -1,8 +1,9 @@
 package br.curso.tdd.testes;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
-
-import org.junit.Ignore;
+import static org.junit.Assert.assertThat;
+import static br.curso.tdd.testes.LeilaoMatcher.temUmLance;
 import org.junit.Test;
 
 import br.curso.tdd.resources.Lance;
@@ -13,13 +14,14 @@ public class LeilaoTest {
 
     @Test
     public void deveReceberUmLance() {
-        Leilao leilao = new Leilao("Macbook Pro 15");
-        assertEquals(0, leilao.getLances().size());
+    	 Leilao leilao = new CriadorDeLeilao().para("Macbook Pro 15").constroi();
+         assertEquals(0, leilao.getLances().size());
 
-        leilao.propoe(new Lance(new Usuario("Steve Jobs"), 2000));
+         Lance lance = new Lance(new Usuario("Steve Jobs"), 2000);
+         leilao.propoe(lance);
 
-        assertEquals(1, leilao.getLances().size());
-        assertEquals(2000, leilao.getLances().get(0).getValor(), 0.00001);
+         assertThat(leilao.getLances().size(), equalTo(1));
+         assertThat(leilao, temUmLance(lance));
     }
 
     @Test
